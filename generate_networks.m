@@ -31,7 +31,7 @@ function generate_networks()
 
   % Must seed the random number generator with some suitably unique
   % string (Matlab random numbers are not too random)
-  [~, host] = system('hostname');
+  [dummy_variable, host] = system('hostname');
   hex = DataHash(strcat(host,datestr(clock)));
   % RandStream accepts numbers < 2^32, and we reduce the number of digits
   % from the hextstream in order to not lose accuracy, large accuracy in
