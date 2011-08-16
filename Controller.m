@@ -73,10 +73,6 @@ classdef Controller
       self.muteffect_store = zeros(self.number_of_tests, 30,...
           self.mutation_settings.quantity);
       
-      % Seed the random number generator - so same for all threads
-      s = RandStream('mt19937ar','Seed', 1283);
-      RandStream.setDefaultStream(s)
-      
       % Run simulations until enough organisms have been tested
       test = 1;
       while test <= self.number_of_tests
