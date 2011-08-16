@@ -1,0 +1,9 @@
+#!/usr/bin/ruby
+
+Dir['Networks/*'].each do |d|
+  #print "-- #{d}\n"
+  print `cat #{d}/valids.txt | wc -l`.strip + " - #{d}"
+  print "\n"
+end
+
+
