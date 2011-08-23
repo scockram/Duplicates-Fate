@@ -2,26 +2,29 @@
 require 'fileutils'
 
 # Directory that is being trimmed down to 1000
-dir = 'Networks/0.05to0.10/'
+[
+  'Networks/0.05to0.10/',
+  'Networks/0.01to0.05/',
+  '0.10plus'
+].each do |dir|
+  # Holding variables
+  available = []
 
-# Holding variables
-available = []
+  # Get list of available networks
+  File.open("#{dir}valids.txt", 'r').readlines.each do |f|
+    available << f.split(' ')
+  end
 
-# Get list of available networks
-File.open("#{dir}valids.txt", 'r').readlines.each do |f|
-  available << f.split(' ')
-end
+  # Shuffle, randomly pick 1000 elements (if exists 1000!)
+  use = available.sort_by{rand}.slice(0...1000)
 
-# Shuffle, randomly pick 1000 elements (if exists 1000!)
-use = available.sort_by{rand}.slice(0...1000)
-
-# Save the list of networks being used
-# Transfer network data files
-File.open("Data/#{dir}list.txt", 'w') do |f|
-  use.each do |u|
-    f.puts u[2..3].join(" ")
-    FileUtils.copy "#{dir}#{u[2]}.mat", "Data/#{dir}#{u[2]}.mat"
-    FileUtils.copy "#{dir}#{u[2]}.txt", "Data/#{dir}#{u[2]}.txt"
+  # Save the list of networks being used
+  # Transfer network data files
+  File.open("Data/#{dir}list.txt", 'w') do |f|
+    use.each do |u|
+      f.puts u[2..3].join(" ")
+      FileUtils.copy "#{dir}#{u[2]}.mat", "Data/#{dir}#{u[2]}.mat"
+      FileUtils.copy "#{dir}#{u[2]}.txt", "Data/#{dir}#{u[2]}.txt"
+    end
   end
 end
-

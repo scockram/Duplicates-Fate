@@ -1,0 +1,22 @@
+#!/usr/bin/ruby
+
+# Sets up Data/Networks/queue to be compatible with processing script
+
+to_process = []
+
+File.open('Data/Networks/to_process.txt', 'w') do |out|
+
+  Dir['Data/Networks/*'].each do |f|
+    if File.directory?(f)
+      File.open("#{f}/list.txt").each do |line|
+        out.puts File.basename(f) + "/" + line.split(" ")[0]
+      end
+    end
+  end
+
+end
+
+`rm Data/Networks/processing`
+`rm Data/Networks/processed`
+`touch Data/Networks/processing`
+`touch Data/Networks/processed`
