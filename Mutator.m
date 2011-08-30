@@ -86,11 +86,13 @@ classdef Mutator
     % based on the settings that were given at creation
     function org = mutate(self, org)
       % useful
-      if mutate_the_duplicate
+      if self.mutate_the_duplicate == 1
         self.gene = org.duplicated;
       else
         y = randi(org.size-1);
-        self.gene = y + (y>=org.duplicated);
+        y
+        org.duplicated
+        self.gene = y + (y>=org.duplicated)
       end
       
       % Repetitive code, but does the job fine.

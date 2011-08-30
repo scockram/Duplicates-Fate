@@ -143,6 +143,8 @@ classdef Organism
       organism.a = [ organism.a(1:gene), 0, organism.a((gene+1):n) ];
       organism.d = [ organism.d(1:gene), 0, organism.d((gene+1):n) ];
       organism.alpha = [ organism.alpha(1:gene), 0, organism.alpha((gene+1):n) ];
+      organism.protein_categorisations = [ organism.protein_categorisations(1:gene), ...
+                                           organism.protein_categorisations(gene:n) ];
       
       % Update size
       organism.size = organism.size + 1;
