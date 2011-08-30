@@ -31,6 +31,10 @@ classdef Mutator
     % 1 - regen
     % 0 - delete
     big_change_delete_regen = 0;
+
+    % 1 - mutation is on the duplicated gene
+    % 0 - is not
+    mutate_the_duplicate = 1;
     
     %% Interals
     gene
@@ -82,7 +86,12 @@ classdef Mutator
     % based on the settings that were given at creation
     function org = mutate(self, org)
       % useful
-      self.gene = org.duplicated;
+      if mutate_the_duplicate
+        self.gene = org.duplicated;
+      else
+        y = randi(org.size-1);
+        self.gene = y + (y>=org.duplicated);
+      end
       
       % Repetitive code, but does the job fine.
       if self.perturb_row == 1

@@ -34,13 +34,14 @@ RandStream.setDefaultStream(s)
 
 % Directory layout
 from_root = 'Data/Networks/';
-to_root = 'Data/Dynamics/';
+to_root = 'Data/Dynamics_alt/';
 to_process = strcat(from_root, 'to_process.txt');
 processing = strcat(from_root, 'processing');
 processed = strcat(from_root, 'processed');
 
 % Create mutator object
 mut = Mutator(settings_mutation);
+mut.mutate_the_duplicate = 0; % Are we doing alternative stuff or not?
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
 %  Processing control

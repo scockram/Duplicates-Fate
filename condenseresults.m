@@ -41,7 +41,7 @@ for i=1:nd
     end
   end
   
-  i
+  disp(i);
 end
 
 s = s(1:(p-1));
