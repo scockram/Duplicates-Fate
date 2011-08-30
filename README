@@ -1,0 +1,48 @@
+Overview
+========
+
+Simulation is done in a number of stages:
+
+  * Network generation
+  * Duplication analysis
+  * Results condensation
+  * Results analysis
+
+Distributed computing speeds the first 2 stages dramatically, SGE (Sun Grid Engine) can
+be used in conjuction with the script "tests.sh" to accomplish this. Once the results have
+been condensed analysis can be done with whatever tool is preferred.
+
+A number of auxillary ruby scripts are provided that provide some simple file manipulation,
+this is a lot easier than working with files in matlab.
+
+Compatible with at least the following versions of matlab:
+
+  * 7.11.0.584 (R2010b) 
+  * 7.8.0.347 (R2009a)
+
+
+Network Generation
+==================
+
+Using generate_networks.m, requirements for the network are specified in this file. Creates
+files Data/Networks/*/<HASH>.mat and records a list of networks in Data/Networks/*/valids.txt.
+
+
+Duplication Analysis
+====================
+
+Using processnetworks.m, settings for the mutations are given in this file. Creates files
+Data/Dynamics/*/<HASH>.mat for each network.
+
+
+Results Condensation
+====================
+
+With condenseresults.m, outputs Data/Dynamics/*/data.mat that contains equal length vectors
+for all relevant variables.
+
+Note: Doesn't require parallelising -- reasonably fast.
+
+
+Results Analysis
+================
