@@ -2,14 +2,47 @@
 % called as per the function line:
 %   [ cdf ] = helpers()
 % No inputs required
-function [ cdf, tidyplot, histnorm ] = helpers()
+function [ cdf, tidyplot, histnorm, heatmap, normv, pdfp ] = helpers()
   cdf = @cdf_helper;
   tidyplot = @tidyplot_helper;
   histnorm = @histnorm_helper;
+  heatmap = @heat_helper;
+  normv = @normv_helper;
+  pdfp = @pdf_helper;
 end
 
+%% Returns the x and y axis for a pdf plot
+function [x,y] = pdf_helper(data, n)
+  x = linspace(min(data), max(data), n);
+  y = zeros(1,n);
+  data = normv_helper(data);
+  
+  for i = 1:length(data)
+    j = 1+floor((n-1)*data(i));
+    y(j) = y(j) +  1;
+  end
+  y = y / length(data);
+end
 
-%% Converts a string to a number 
+%% Returns the normalized vector
+function normalized = normv_helper(x)
+  normalized = (x-min(x))/(max(x)-min(x));
+end
+
+%% Heatmap
+function [X,Y,Z] = heat_helper(x,y,xrange,yrange)
+  % Preprocessing
+  n = length(xrange)-1;
+  [ X, Y ] = meshgrid(xrange, yrange);
+  Z = X - X;
+  
+  % Categorise all the things
+  for i = 1:length(x)
+    xr = 1 + floor(n*x(i));
+    yr = 1 + floor(n*y(i));
+    Z(xr, yr) = Z(xr, yr) + 1;
+  end
+end
 
 
 %% Computes the cumulative distribution function of some distribution.
@@ -27,7 +60,7 @@ end
 
 %% Tidies the currently focused figure, and sets labels if variables
 % x_l and y_l are set, otherwise prompts for input
-function tidyplot_helper()
+function tidyplot_helper(x_l, y_l)
   set(gca, ...
     'Box'         , 'off'     , ...
     'TickDir'     , 'out'     , ...
@@ -36,10 +69,10 @@ function tidyplot_helper()
     'YColor'      , [.3 .3 .3], ...
     'LineWidth'   , 1         );
 
-  if ~exist('x_l','var')
-      x_l = input('X-Label: ', 's');
-      y_l = input('Y-Label: ', 's');
-  end
+  %if ~exist('x_l','var')
+  %    x_l = input('X-Label: ', 's');
+  %    y_l = input('Y-Label: ', 's');
+  %end
 
   xlabel( x_l );
   ylabel( y_l );

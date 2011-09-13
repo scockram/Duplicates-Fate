@@ -1,0 +1,15 @@
+#!/usr/bin/ruby
+
+commands = [
+  'cd secamfs/duplicatesfate',
+  'tar -zcvf data.tar.gz Data'
+].join('; ')
+print "Creating remote archive\n"
+print `ssh blue95 '#{commands}'`.empty? ? "Failed\n" : "Success\n"
+
+print "Copying data\n"
+print `scp blue95:secamfs/duplicatesfate/data.tar.gz .`
+
+print "Extracting data\n"
+print `tar -zxvf data.tar.gz`.empty? ? "Failed\n" : "Success\n"
+

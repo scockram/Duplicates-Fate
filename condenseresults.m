@@ -23,8 +23,8 @@ sc =  @(s1, s2) 1 - exp(-abs(s1-s2)/0.1); % sigma defined as 0.1
 
 % Loop through datafiles doing some manipulation
 for i=1:nd
-  tic
   df = cell2mat(datafiles(i));
+  if strcmp(df, 'data.mat'), break, end
   file = strcat(dir, df);
   d = load(file);
   
@@ -34,14 +34,17 @@ for i=1:nd
       sd(p) = sc(d.D_wt, d.D_dup_m(k,j));
       swt(p) = sc(d.D_wt, d.D_wt_m(k,j));
       sdup(p) = sc(d.D_dup(j), d.D_dup_m(k,j));
+      if isnan(sdup(p))
+        sdup(p) = 1;
+      end
       class(p) = d.class(j);
       muteff(p) = d.mut_eff(k,j);
       
       p = p+1;
     end
   end
-  
-  disp(i);
+
+  if ~mod(i,20), disp(strcat('Done: ',num2str(i))), end
 end
 
 s = s(1:(p-1));
