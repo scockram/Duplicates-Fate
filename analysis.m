@@ -5,6 +5,16 @@ load(datafile);
 [ cdf, tidyplot, histnorm, heatmap, normv, pdfp ] = helpers();
 n2s = @num2str;
 
+% Filter functional groups
+fg = 0;
+if fg~=0
+  r = find(class==fg);
+  vars = {'class','muteff','s','sd','sdup','swt'};
+  for i=1:length(vars)
+    eval([ vars{i} '=' vars{i} '(r);' ])
+  end
+end
+
 %% Data Cleaning
 % Selecting data which is interesting
 v = find( (swt ~= 1) & (sdup ~=1) ) ;
@@ -21,17 +31,24 @@ disp([ 'Cases where instability ONLY in DUP: ' n2s(length(v2)) ]);
 disp([ 'Other cases: ' n2s(length(v)) ]);
 disp('------');
 
-%% Multiple CDF's
+%% Replicate Original Analysis
+clf; hold on;
+colors = [ 1 0 0; 0 0 1; 0 .7 .5; 0 0 0; ];
+for c=1:4
+  [x,y] = cdf(sd(class==c));
+  plot(x,y,'color',colors(c,:))
+end
+legend('Receptors', 'Kinases', 'Phosphotases', 'Effectors', 'Location','NorthWest')
+tidyplot('Network Fitness Effect','Cumulative Frequency')
+title('Distribution of Network Fitness Effect of Duplication and Mutation')
 
-plot(x,y,x1,y1)
-tidyplot('Network Fitness Effect')
-??? Input argument "y_l" is undefined.
 
-Error in ==> helpers>tidyplot_helper at 78
-  ylabel( y_l );
- 
-tidyplot('Network Fitness Effect', '')
+%% Multiple CDF's (wt and dup)
+[x,y] = cdf(swt);
+[x1,y1] = cdf(sdup);
+plot(x,y,'b',x1,y1,'r')
 tidyplot('Network Fitness Effect', 'Proportion of Data')
+legend('s_{wt}', 's_{dup}')
 
 %% PDF of the actual mutation effects
 [X,Y] = pdfp(muteff,51);
@@ -51,7 +68,7 @@ tidyplot('s_{wt}', 's_{dup}')
 %% PDF plot
 %sdiff = sdup - swt;
 sdiff = sdup(v) - swt(v);
-eps = .001;
+eps = 1;
 sdiff2 = normv(sdiff(abs(sdiff) < eps));
 n=101;
 x = linspace(-eps,eps,n);
@@ -71,13 +88,13 @@ for i=1:length(y);
     y2(i) = 0.8*y(i) + 0.1*y(i-1) + 0.1*y(i+1);
   end
 end
-plot(x,y,'x')
+plot(x,y)
 tidyplot('s_{dup} - s_{wt}', 'Data Density');
 
 %% Qualitative Numbers for the PDF plot at different "zooms"
 bp = [];
 deltalabels = {};
-deltas = (10.^(-(1:6)));
+deltas = (10.^(-(1:0.5:9)));
 for delta=deltas
   sdiffr = sdiff(abs(sdiff) < delta);
   epsilon = delta/(10^3);

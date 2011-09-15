@@ -2,7 +2,7 @@
 % vectors for creating figures and plots from.
 
 % This can be changed
-dir = 'Data/Dynamics/0.10plus/';
+dir = 'Data/Dynamics_alt/0.10plus/';
 
 % Finds what .mat files exist in the dir
 stuffindir = what(dir);

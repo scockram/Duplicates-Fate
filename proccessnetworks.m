@@ -49,39 +49,40 @@ mut.mutate_the_duplicate = 0; % Are we doing alternative stuff or not?
 
 % Hacky method of do { } while (); in matlab
 while true
-  % Load list of organisms
-  list = textread(to_process, '%s');
-  % If there exists nothing that needs processing
-  if length(list) == 0
-    break
-  else
-    % Pick random element from list
-    el = randi(length(list));
-    ele = cell2mat(list(el));
-
-    % Remove the element from to_process
-    % Note: probably not efficient, but is not relatively slow
-    a = []; b = [];
-    if el ~= 1
-      a = list(1:(el-1));
-    end
-    if el ~= length(list)
-      b = list((el+1):length(list));
-    end
-    list_new = [a; b];
-    fid = fopen(to_process, 'w');
-    for i=1:length(list_new)
-      fprintf(fid, '%s\n', cell2mat(list_new(i)));
-    end
-    fclose(fid);
-
-    % Add element to processing queue
-    fid = fopen(processing, 'a');
-    fprintf(fid, '%s\n', ele);
-    fclose(fid);
-  end
+%  % Load list of organisms
+%  list = textread(to_process, '%s');
+%  % If there exists nothing that needs processing
+%   if length(list) == 0
+%     break
+%   else
+%     % Pick random element from list
+%     el = randi(length(list));
+%     ele = cell2mat(list(el));
+% 
+%     % Remove the element from to_process
+%     % Note: probably not efficient, but is not relatively slow
+%     a = []; b = [];
+%     if el ~= 1
+%       a = list(1:(el-1));
+%     end
+%     if el ~= length(list)
+%       b = list((el+1):length(list));
+%     end
+%     list_new = [a; b];
+%     fid = fopen(to_process, 'w');
+%     for i=1:length(list_new)
+%       fprintf(fid, '%s\n', cell2mat(list_new(i)));
+%     end
+%     fclose(fid);
+% 
+%     % Add element to processing queue
+%     fid = fopen(processing, 'a');
+%     fprintf(fid, '%s\n', ele);
+%     fclose(fid);
+%   end
 
   % Load the organism
+  ele = '0.10plus/7dd0a2b0d3a44f1ffb288758b94242ca';
   data_file = strcat(from_root, ele, '.mat');
   data = load(data_file);
   wt = data.organism;
@@ -118,7 +119,7 @@ while true
     % unstable system -- mutation may make stable again
     for j=1:m
       % Create a mutated duplicate
-      dup_m = mut.mutate(dup);
+      [ mut, dup_m ] = mut.mutate(dup);
       sim_dup_m = Simulation(dup_m);
 
       % Dynamics = ?
@@ -129,10 +130,12 @@ while true
       end
 
       % Create a mutated WT
+      % First: find out which gene the mutant is (WHY?: NOT ALWAYS i)
+      g = mut.gene - (mut.gene>dup.duplicated);
       wt_m = wt;
-      a = dup_m.k(i,:);
-      b = [ a(1:(i-1)) , a((i+1):length(a)) ];
-      wt_m.k(i,:) = b;
+      a = dup_m.k(g,:);
+      b = [ a(1:(g-1)) , a((g+1):length(a)) ];
+      wt_m.k(g,:) = b;
       sim_wt_m = Simulation(wt_m);
 
       % Dynamics = ?

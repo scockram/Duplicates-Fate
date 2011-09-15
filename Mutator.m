@@ -84,15 +84,13 @@ classdef Mutator
     
     % Mutates the organism - calls the small mutation methods individually
     % based on the settings that were given at creation
-    function org = mutate(self, org)
+    function [self,org] = mutate(self, org)
       % useful
       if self.mutate_the_duplicate == 1
         self.gene = org.duplicated;
       else
         y = randi(org.size-1);
-        y
-        org.duplicated
-        self.gene = y + (y>=org.duplicated)
+        self.gene = y + (y>=org.duplicated);
       end
       
       % Repetitive code, but does the job fine.
