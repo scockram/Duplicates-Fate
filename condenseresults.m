@@ -2,7 +2,7 @@
 % vectors for creating figures and plots from.
 
 % This can be changed
-dir = 'Data/Dynamics_alt/0.10plus/';
+dir = 'Data/Dynamics/0.10plus/';
 
 % Finds what .mat files exist in the dir
 stuffindir = what(dir);
@@ -20,6 +20,8 @@ p = 1;
 
 % For calculating s values
 sc =  @(s1, s2) 1 - exp(-abs(s1-s2)/0.1); % sigma defined as 0.1
+sc2 = @(s1, s2) 1 - exp(-abs((s1-s2)/s1));
+sc=sc2;
 
 % Loop through datafiles doing some manipulation
 for i=1:nd

@@ -46,3 +46,31 @@ Note: Doesn't require parallelising -- reasonably fast.
 
 Results Analysis
 ================
+
+analysis.m and analysis_responsecurves.m
+
+Both files use MATLAB's cell block editing. Command-Return or Control-Return runs only the 
+currently active section (the one that is highlighted yellow, where the cursor currently is).
+This allow for rapid prototyping of the analysis intended.
+
+analysis.m: Contains many different ways of visualising the whole data sets. See Comments.
+
+analysis_responsecurves.m: Contains ways of looking at the change in response curves for individual
+networks.
+
+
+Typical workflow
+================
+
+On remote machines (blue)
+$ # Generate some networks
+$ qsub batch_generate.sh
+$ # Wait for generation to finish
+$ # Condense all generated networks into Data/
+$ ./choose1000networks
+$ # Begin processing networks
+$ ./preprocessing
+$ qsub batch_process.sh
+
+And on local Machine
+$ ./getremotedata
