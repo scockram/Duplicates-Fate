@@ -49,40 +49,39 @@ mut.mutate_the_duplicate = 0; % Are we doing alternative stuff or not?
 
 % Hacky method of do { } while (); in matlab
 while true
-%  % Load list of organisms
-%  list = textread(to_process, '%s');
-%  % If there exists nothing that needs processing
-%   if length(list) == 0
-%     break
-%   else
-%     % Pick random element from list
-%     el = randi(length(list));
-%     ele = cell2mat(list(el));
-% 
-%     % Remove the element from to_process
-%     % Note: probably not efficient, but is not relatively slow
-%     a = []; b = [];
-%     if el ~= 1
-%       a = list(1:(el-1));
-%     end
-%     if el ~= length(list)
-%       b = list((el+1):length(list));
-%     end
-%     list_new = [a; b];
-%     fid = fopen(to_process, 'w');
-%     for i=1:length(list_new)
-%       fprintf(fid, '%s\n', cell2mat(list_new(i)));
-%     end
-%     fclose(fid);
-% 
-%     % Add element to processing queue
-%     fid = fopen(processing, 'a');
-%     fprintf(fid, '%s\n', ele);
-%     fclose(fid);
-%   end
+  % Load list of organisms
+  list = textread(to_process, '%s');
+  % If there exists nothing that needs processing
+   if length(list) == 0
+     break
+   else
+     % Pick random element from list
+     el = randi(length(list));
+     ele = cell2mat(list(el));
+ 
+     % Remove the element from to_process
+     % Note: probably not efficient, but is not relatively slow
+     a = []; b = [];
+     if el ~= 1
+       a = list(1:(el-1));
+     end
+     if el ~= length(list)
+       b = list((el+1):length(list));
+     end
+     list_new = [a; b];
+     fid = fopen(to_process, 'w');
+     for i=1:length(list_new)
+       fprintf(fid, '%s\n', cell2mat(list_new(i)));
+     end
+     fclose(fid);
+ 
+     % Add element to processing queue
+     fid = fopen(processing, 'a');
+     fprintf(fid, '%s\n', ele);
+     fclose(fid);
+   end
 
   % Load the organism
-  ele = '0.10plus/7dd0a2b0d3a44f1ffb288758b94242ca';
   data_file = strcat(from_root, ele, '.mat');
   data = load(data_file);
   wt = data.organism;

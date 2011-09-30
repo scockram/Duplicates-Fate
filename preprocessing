@@ -6,7 +6,8 @@ to_process = []
 
 File.open('Data/Networks/to_process.txt', 'w') do |out|
 
-  Dir['Data/Networks/*'].each do |f|
+  # Normally Dir['Data/Networks/*']...
+  Dir['Data/Networks/0.10plus'].each do |f|
     if File.directory?(f)
       File.open("#{f}/list.txt").each do |line|
         out.puts File.basename(f) + "/" + line.split(" ")[0]
